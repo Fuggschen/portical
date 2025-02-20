@@ -62,8 +62,9 @@ function forward() {
     return
   else
       echo -n "Removing existing rule... "
-      run_cmd docker run --rm --network ${network} danielbodart/portical \
-        upnpc ${root:+-u "$root"} -d "${external_port}" "${protocol}"
+      if ! run_cmd docker run --rm --network ${network} danielbodart/portical upnpc ${root:+-u "$root"} -d "${external_port}" "${protocol}"; then
+        echo "No existing rule found or failed to delete, continuing..."
+      fi
       echo "DONE"
   fi
 
